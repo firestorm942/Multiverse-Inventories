@@ -85,6 +85,7 @@ public class TestInstanceCreator {
             // Initialize the Mock server.
             mockServer = mock(Server.class);
             when(mockServer.getName()).thenReturn("TestBukkit");
+            when(mockServer.getBukkitVersion()).thenReturn("1.18.1-R0.1-SNAPSHOT");
             Logger.getLogger("Minecraft").setParent(Util.logger);
             when(mockServer.getLogger()).thenReturn(Util.logger);
             when(mockServer.getWorldContainer()).thenReturn(worldsDirectory);

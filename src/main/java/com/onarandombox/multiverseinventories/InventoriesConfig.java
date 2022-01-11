@@ -104,8 +104,8 @@ public final class InventoriesConfig {
         }
     }
 
-    private CommentedYamlConfiguration config;
-    private MultiverseInventories plugin;
+    private final CommentedYamlConfiguration config;
+    private final MultiverseInventories plugin;
 
     InventoriesConfig(MultiverseInventories plugin) throws IOException {
         this.plugin = plugin;
@@ -114,15 +114,17 @@ public final class InventoriesConfig {
             Logging.fine("Created data folder.");
         }
 
-        // Check if the config file exists.  If not, create it.
+        // Check if the config file exists. If not, create it.
         File configFile = new File(plugin.getDataFolder(), "config.yml");
-        if (!configFile.exists()) {
+        boolean configFileExists = configFile.exists();
+        if (!configFileExists) {
             Logging.fine("Created config file.");
             configFile.createNewFile();
         }
 
         // Load the configuration file into memory
-        config = new CommentedYamlConfiguration(configFile, true);
+        boolean supportsCommentsNatively = Integer.parseInt(this.plugin.getServer().getBukkitVersion().split("\\.")[1]) > 17;
+        config = new CommentedYamlConfiguration(configFile, !configFileExists || !supportsCommentsNatively);
 
         // Sets defaults config values
         this.setDefaults();
