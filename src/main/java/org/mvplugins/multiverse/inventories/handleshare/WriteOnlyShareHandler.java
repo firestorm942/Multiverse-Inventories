@@ -38,6 +38,7 @@ public final class WriteOnlyShareHandler extends ShareHandler {
                     worldGroup.getApplicableShares()
             );
             unhandledShares.removeAll(worldGroup.getApplicableShares());
+            unhandledShares.removeAll(worldGroup.getDisabledShares());
         }
         Shares sharesToWrite = inventoriesConfig.getAlwaysWriteWorldProfile()
                 ? Sharables.enabled()
