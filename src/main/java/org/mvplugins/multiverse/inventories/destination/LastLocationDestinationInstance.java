@@ -44,17 +44,22 @@ public final class LastLocationDestinationInstance extends DestinationInstance<L
 
         var playerWorld = player.getWorld().getName();
         if (playerWorld.equals(worldName)) {
+            // teleporting within same world
             return worldManager.getLoadedWorld(worldName).map(MultiverseWorld::getSpawnLocation);
         }
 
         for (var group : worldGroupManager.getGroupsForWorld(worldName)) {
             Logging.finer("LastLocationDestination: group: " + group);
             if (!group.containsWorld(playerWorld) && group.getApplicableShares().contains(Sharables.LAST_LOCATION)) {
+                // teleporting to a different world group
                 return Option.of(profileContainerStoreProvider.getStore(ContainerType.GROUP)
                         .getContainer(group.getName())
                         .getPlayerProfileNow(player)
                         .get(Sharables.LAST_LOCATION))
                         .orElse(() -> worldManager.getLoadedWorld(worldName).map(MultiverseWorld::getSpawnLocation));
+            } else if (group.getDisabledShares().contains(Sharables.LAST_LOCATION)) {
+                // last location disabled for the group and hence should not apply, defaulting to world's spawn
+                return worldManager.getLoadedWorld(worldName).map(MultiverseWorld::getSpawnLocation);
             }
         }
 

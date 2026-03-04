@@ -23,6 +23,7 @@ public final class ReadOnlyShareHandler extends ShareHandler {
         for (WorldGroup worldGroup : worldGroups) {
             affectedProfiles.addReadProfile(worldGroup.getGroupProfileContainer().getProfileKey(player), worldGroup.getApplicableShares());
             unhandledShares.removeAll(worldGroup.getApplicableShares());
+            unhandledShares.removeAll(worldGroup.getDisabledShares());
         }
         if (!unhandledShares.isEmpty()) {
             affectedProfiles.addReadProfile(
